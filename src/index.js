@@ -8,18 +8,18 @@ import "./assets/scss/argon-design-system-react.scss?v1.1.0";
 import './index.css';
 
 // import Index from "./views/Index";
-// import Landing from "./views/examples/Landing";
+import Landing from "./views/examples/Landing";
 import Login from "./views/Login";
 import Register from "./views/Register";
 // import Profile from "./views/examples/Profile";
 
-import App from './App';
+// import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
-      <Route path="/" exact render={props => <Register {...props} />} />
+      <Route path="/" exact render={props => <Landing {...props} />} />
       <Redirect to="/" />
     </Switch>
   </BrowserRouter>,

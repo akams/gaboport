@@ -1,6 +1,15 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { Container } from 'reactstrap';
+import { routerMiddleware, ConnectedRouter } from 'connected-react-router';
+import { createBrowserHistory } from 'history';
+
+import Main from './components/Routes/Main';
+import Navigation from './components/Navigation';
+import rootReducer from './redux/reducers';
 
 function App() {
   return (
