@@ -3,33 +3,41 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { Container } from 'reactstrap';
 import { routerMiddleware, ConnectedRouter } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
 
-import Main from './components/Routes/Main';
-import Navigation from './components/Navigation';
+import Main from './routes/Main';
 import rootReducer from './redux/reducers';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const REACT_APP_DEVTOOLS = process.env.REACT_APP_DEVTOOLS
+  ? JSON.parse(process.env.REACT_APP_DEVTOOLS)
+  : false;
+
+const history = createBrowserHistory();
+
+const middleware = REACT_APP_DEVTOOLS
+  ? composeWithDevTools(applyMiddleware(thunk, routerMiddleware(history)))
+  : applyMiddleware(thunk, routerMiddleware(history));
+
+export const myStore = createStore(rootReducer(history), middleware);
+
+class App extends Component {
+  state = {};
+  render() {
+    return (
+      <ConnectedRouter history={this.props.history}>
+        <div className="App">
+          <Main {...this.props} />
+        </div>
+      </ConnectedRouter>
+    );
+  }
 }
 
-export default App;
+const ReduxApp = () => (
+  <Provider store={myStore}>
+    <App history={history} />
+  </Provider>
+);
+
+export default ReduxApp
