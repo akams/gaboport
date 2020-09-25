@@ -27,7 +27,10 @@ class App extends Component {
     return (
       <ConnectedRouter history={this.props.history}>
         <div className="App">
-          <Main {...this.props} />
+          <Main
+            dispatch={myStore.dispatch}
+            {...this.props} 
+          />
         </div>
       </ConnectedRouter>
     );

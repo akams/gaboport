@@ -31,7 +31,7 @@ class Main extends Component {
     return (
       <BrowserRouter>
         <Switch>
-          <Route exact path={ROUTES.SIGN_UP} render={props => <Register {...props} />} />
+          <Route exact path={ROUTES.SIGN_UP} render={props => <Register {...this.props} />} />
           <Route
             path={ROUTES.SIGN_IN}
             exact
