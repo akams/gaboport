@@ -1,21 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { reduxForm, Field, Fields, change, formValueSelector } from 'redux-form';
+import { reduxForm, Field, change, formValueSelector } from 'redux-form';
+import { compose } from 'recompose';
 import {
   Button,
   Card,
   CardBody,
-  FormGroup,
   Form,
-  Input,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroup,
   Container,
   Row,
   Col
 } from 'reactstrap';
 import { createInitFormData, createUpdateValue, normalizeFieldValue } from '../../redux/form/helpers';
+import { renderInputGroupField } from '../../redux/form/renderers'
 import { compileValidation } from './validate'
 
 const INITIAL_STATE = {
@@ -27,14 +24,6 @@ const INITIAL_STATE = {
 
 export const formName = 'register';
 export const initFormData = createInitFormData(formName);
-
-const warn = values => {
-  const warnings = {}
-  if (values.email < 19) {
-    warnings.age = 'Hmm, you seem a bit young...'
-  }
-  return warnings
-}
 
 class RegisterForm extends Component {
   constructor(props) {
@@ -53,7 +42,7 @@ class RegisterForm extends Component {
       passwordTwo,
       error,
     } = this.state;
-
+    console.log('iciiiii======>>>', this.props);
     return (
       <>
         <main ref="main">
@@ -77,49 +66,27 @@ class RegisterForm extends Component {
                         <small>Inscription</small>
                       </div>
                       <Form role="form">
-                        <FormGroup>
-                          <InputGroup className="input-group-alternative mb-3">
-                            <InputGroupAddon addonType="prepend">
-                              <InputGroupText>
-                                <i className="ni ni-hat-3" />
-                              </InputGroupText>
-                            </InputGroupAddon>
-                            <Input placeholder="Email" type="email" name="email" value={email} onChange={this.onChange} />
-                          </InputGroup>
-                        </FormGroup>
-                        <FormGroup>
-                          <InputGroup className="input-group-alternative mb-3">
-                            <InputGroupAddon addonType="prepend">
-                              <InputGroupText>
-                                <i className="ni ni-email-83" />
-                              </InputGroupText>
-                            </InputGroupAddon>
-                            <Input 
-                              name="passwordOne" 
-                              type="password"
-                              autoComplete="off"
-                              value={passwordOne}
-                              onChange={this.onChange} 
-                            />
-                          </InputGroup>
-                        </FormGroup>
-                        <FormGroup>
-                          <InputGroup className="input-group-alternative">
-                            <InputGroupAddon addonType="prepend">
-                              <InputGroupText>
-                                <i className="ni ni-lock-circle-open" />
-                              </InputGroupText>
-                            </InputGroupAddon>
-                            <Input
-                              placeholder="Password"
-                              type="password"
-                              autoComplete="off"
-                              name="passwordTwo"
-                              value={passwordTwo}
-                              onChange={this.onChange} 
-                            />
-                          </InputGroup>
-                        </FormGroup>
+                        <Field
+                          classNameI="ni ni-hat-3"
+                          name="email"
+                          type="email"
+                          placeholder="Email"
+                          component={renderInputGroupField}
+                        />
+                        <Field
+                          classNameI="ni ni-lock-circle-open"
+                          name="passwordOne" 
+                          type="password"
+                          autoComplete="off"
+                          component={renderInputGroupField}
+                        />
+                        <Field
+                          classNameI="ni ni-lock-circle-open"
+                          name="passwordTwo" 
+                          type="password"
+                          autoComplete="off"
+                          component={renderInputGroupField}
+                        />
                         <div className="text-muted font-italic">
                           <small>
                             password strength:{" "}
@@ -175,10 +142,18 @@ class RegisterForm extends Component {
   }
 }
 
-export default reduxForm({
-  form: formName,
-  validate: compileValidation,
-  warn
-})(connect(state => ({
-  initialData: {}
-}))(RegisterForm));
+const mapDispatchToProps = {};
+const mapStateToProps = () => ({});
+
+export default compose(
+  reduxForm({
+    form: formName,
+    validate: compileValidation
+  }),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )
+)(RegisterForm)
+
+

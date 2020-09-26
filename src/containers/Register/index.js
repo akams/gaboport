@@ -32,7 +32,9 @@ class RegisterPage extends Component {
   render() {
     return (
       <>
-        <RegisterForm />
+        <RegisterForm
+          {...this.props}
+        />
       </>
     );
   }
