@@ -1,18 +1,13 @@
 import React from 'react';
 import {
-  Button,
-  Card,
-  CardBody,
   FormGroup,
-  Form,
   Input,
   InputGroupAddon,
   InputGroupText,
   InputGroup,
-  Container,
-  Row,
-  Col
 } from 'reactstrap';
+
+import './style.scss'
 
 /** Render complex input group sans label
  * @param {*} param0 
@@ -34,7 +29,7 @@ export const renderInputGroupField = ({
       <Input {...input} type={type} />
     </InputGroup>
     {touched &&
-      ((error && <span>{error}</span>) ||
+      ((error && <span className="error-render-form">{error}</span>) ||
         (warning && <span>{warning}</span>))}
 </FormGroup>
 )

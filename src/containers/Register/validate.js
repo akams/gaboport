@@ -7,13 +7,13 @@ export const compileValidation = values => {
   }
   if (!values.passwordOne) {
     errors.passwordOne = 'Required'
-  } else if (values.passwordOne.length > 4) {
-    errors.passwordOne = 'Must be 4 characters or less'
+  } else if (values.passwordOne.length < 6) {
+    errors.passwordOne = 'Must be 6 characters or more'
   }
   if (!values.passwordTwo) {
     errors.passwordTwo = 'Required'
-  } else if (values.passwordTwo.length > 4) {
-    errors.passwordTwo = 'Must be 4 characters or less'
+  } else if (values.passwordTwo.length < 6) {
+    errors.passwordTwo = 'Must be 6 characters or more'
   } else if (values.passwordOne !== values.passwordTwo) {
     errors.passwordTwo = 'Les mots de passe ne correspondent pas'
   }
