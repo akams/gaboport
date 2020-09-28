@@ -36,7 +36,6 @@ class RegisterPage extends Component {
   }
 
   handleSubmit(data) {
-    console.log('index.js handleSubmit', {data})
     const { email, passwordOne } = data;
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)

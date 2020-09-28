@@ -1,46 +1,25 @@
 import React, { Component } from 'react';
-import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import { routerMiddleware, ConnectedRouter } from 'connected-react-router';
-import { createBrowserHistory } from 'history';
+import { ConnectedRouter } from 'connected-react-router';
 
+import configureStore, { history } from './configureStore';
 import Main from './routes/Main';
-import rootReducer from './redux/reducers';
 
-const REACT_APP_DEVTOOLS = process.env.REACT_APP_DEVTOOLS
-  ? JSON.parse(process.env.REACT_APP_DEVTOOLS)
-  : false;
-
-const history = createBrowserHistory();
-
-const middleware = REACT_APP_DEVTOOLS
-  ? composeWithDevTools(applyMiddleware(thunk, routerMiddleware(history)))
-  : applyMiddleware(thunk, routerMiddleware(history));
-
-export const myStore = createStore(rootReducer(history), middleware);
+export const myStore = configureStore();
 
 class App extends Component {
-  state = {};
   render() {
     return (
-      <ConnectedRouter history={this.props.history}>
-        <div className="App">
+      <Provider store={myStore}>
+        <ConnectedRouter history={history}>
           <Main
             dispatch={myStore.dispatch}
-            {...this.props} 
+            {...this.props}
           />
-        </div>
-      </ConnectedRouter>
+        </ConnectedRouter>
+      </Provider>
     );
   }
 }
 
-const ReduxApp = () => (
-  <Provider store={myStore}>
-    <App history={history} />
-  </Provider>
-);
-
-export default ReduxApp
+export default App;

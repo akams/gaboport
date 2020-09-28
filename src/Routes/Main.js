@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
+import { Route, Switch, Redirect } from 'react-router'
 
 import * as ROUTES from '../constants/routes';
 import { withAuthentication } from '../components/Session';
@@ -29,17 +29,16 @@ class Main extends Component {
 
   render() {
     return (
-      <BrowserRouter>
+      <>
         <Switch>
           <Route exact path={ROUTES.SIGN_UP} render={props => <Register {...this.props} />} />
           <Route
             path={ROUTES.SIGN_IN}
-            exact
-            render={props => <Login {...props} />}
+            render={props => <Login {...this.props} />}
           />
-          <Redirect to={ROUTES.SIGN_UP} />
+          <Redirect to={ROUTES.SIGN_IN} />
         </Switch>
-      </BrowserRouter>
+      </>
     );
   }
 }

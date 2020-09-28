@@ -4,9 +4,10 @@ import { connectRouter } from 'connected-react-router';
 
 import user from './user/user';
 
-export default history =>
-  combineReducers({
-    router: connectRouter(history),
-    form: formReducer,
-    user,
-  });
+const rootReducer = (history) => combineReducers({
+  router: connectRouter(history),
+  form: formReducer,
+  user,
+})
+
+export default rootReducer

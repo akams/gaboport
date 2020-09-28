@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { Link, withRouter } from 'react-router-dom';
 // reactstrap components
 import {
   Button,
@@ -15,6 +15,7 @@ import {
   Row,
   Col
 } from 'reactstrap';
+import * as ROUTES from '../../constants/routes';
 
 class Login extends Component {
   componentDidMount() {
@@ -106,13 +107,12 @@ class Login extends Component {
                       </a>
                     </Col>
                     <Col className="text-right" xs="6">
-                      <a
+                      <Link
                         className="text-light"
-                        href="#pablo"
-                        onClick={e => e.preventDefault()}
+                        to={ROUTES.SIGN_UP}
                       >
                         <small>Create new account</small>
-                      </a>
+                      </Link>
                     </Col>
                   </Row>
                 </Col>
