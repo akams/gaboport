@@ -1,7 +1,8 @@
-import app from 'firebase/app';
+import firebase from 'firebase/app';
 import 'firebase/auth';
-import 'firebase/database';
+import 'firebase/firestore';
 import 'firebase/storage';
+import 'firebase/analytics';
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -16,11 +17,11 @@ const config = {
 
 class Firebase {
   constructor() {
-    app.initializeApp(config);
-
-    this.auth = app.auth();
-    this.db = app.database();
-    this.storage = app.storage();
+    firebase.initializeApp(config);
+    this.auth = firebase.auth();
+    this.firestore = firebase.firestore();
+    this.storage = firebase.storage();
+    this.analytics = firebase.analytics();
   }
 
   // *** Auth API ***
@@ -43,9 +44,8 @@ class Firebase {
 
   // *** User API ***
 
-  user = uid => this.db.ref(`users/${uid}`);
-
-  users = () => this.db.ref('users');
+  // user = uid => this.db.ref(`users/${uid}`);
+  // users = () => this.db.ref('users');
 }
 
 export default Firebase;

@@ -1,62 +1,20 @@
-import React, { Component } from 'react';
-import { compose } from 'recompose';
-import { connect } from 'react-redux';
-import { Route, Switch, Redirect } from 'react-router'
+import React from 'react';
+import { Route, Switch, Redirect } from 'react-router';
 
-import * as ROUTES from '../constants/routes';
-import { withAuthentication } from '../components/Session';
-import { dispatchSetUsers } from '../redux/action/user';
+import InAppRouteur from '../routes/InAppRouteur';
+import AuthRouteur from '../routes/AuthRouteur';
 
-import Register from '../containers/Register'
-import Login from '../containers/Login'
-
-class Main extends Component {
-  state = {};
-
-  componentWillMount() {
-    this.loadUserFromToken();
-  }
-
-  loadUserFromToken() {
-    let token = sessionStorage.getItem('cookie_user');
-    if (!token || token === '') {
-      //if there is no token, dont bother
-      return;
-    }
-    console.log({token})
-    return this.props.dispatchSetUsersFunction(JSON.parse(token));
-  }
-
-  render() {
-    return (
-      <>
-        <Switch>
-          <Route exact path={ROUTES.SIGN_UP} render={props => <Register {...this.props} />} />
-          <Route
-            path={ROUTES.SIGN_IN}
-            render={props => <Login {...this.props} />}
-          />
-          <Redirect to={ROUTES.SIGN_IN} />
-        </Switch>
-      </>
-    );
-  }
+function Main(props) {
+  return (
+    <>
+      <Switch>
+        <Route exact path="/admin" render={() => <InAppRouteur {...props} />} />
+        <Route exact path="/auth" render={() => <AuthRouteur {...props} />} />
+        <Redirect from="/" to="/admin/home" />
+      </Switch>
+    </>
+  );
 }
 
-const mapDispatchToProps = {
-  dispatchSetUsersFunction: user => dispatchSetUsers(user),
-};
 
-const mapStateToProps = () => ({
-});
-
-
-const AppRedux = compose(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )
-)(Main);
-
-
-export default withAuthentication(AppRedux);
+export default Main;

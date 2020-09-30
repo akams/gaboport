@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 
@@ -7,19 +7,17 @@ import Main from './routes/Main';
 
 export const myStore = configureStore();
 
-class App extends Component {
-  render() {
-    return (
-      <Provider store={myStore}>
-        <ConnectedRouter history={history}>
-          <Main
-            dispatch={myStore.dispatch}
-            {...this.props}
-          />
-        </ConnectedRouter>
-      </Provider>
-    );
-  }
+function App(props) {
+  return (
+    <Provider store={myStore}>
+      <ConnectedRouter history={history}>
+        <Main
+          dispatch={myStore.dispatch}
+          {...props}
+        />
+      </ConnectedRouter>
+    </Provider>
+  );
 }
 
 export default App;

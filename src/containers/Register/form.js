@@ -28,8 +28,9 @@ class RegisterForm extends Component {
   };
 
   handleSubmit(data) {
-    const errors = this.props.originalOnSubmit(data);
-    console.log('----->>>son', {errors})
+    this.props.originalOnSubmit(data);
+    // console.error('----->>>son', {errors})
+    // errors.then(a => console.log({a})).catch(ee => console.error(ee))
     // const errors = this.props.originalOnSubmit(data, mode);
     // if (!errors) {
     //   this.setState({

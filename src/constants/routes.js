@@ -1,12 +1,34 @@
+import Register from '../containers/Register'
+import Login from '../containers/Login'
+import Home from '../containers/Home'
+
+
 export const SIGN_UP = '/signup';
 export const SIGN_IN = '/signin';
-export const LANDING = '/';
 export const HOME = '/home';
-export const ACCOUNT = '/account';
-export const ADMIN = '/admin';
-export const PASSWORD_FORGET = '/pw-forget';
 
-export const UPDLOAD_FILES = '/upload-file';
+const ROUTES = [
+  {
+    path: SIGN_UP,
+    name: "Register",
+    icon: "ni ni-circle-08 text-pink",
+    component: Register,
+    layout: "/auth"
+  },
+  {
+    path: SIGN_IN,
+    name: "Login",
+    icon: "ni ni-key-25 text-info",
+    component: Login,
+    layout: "/auth"
+  },
+  {
+    path: HOME,
+    name: "home",
+    icon: "ni ni-tv-2 text-primary",
+    component: Home,
+    layout: "/admin" //Ne signifie pas que l'utilisateur est forcément un admin
+  },
+];
 
-
-export const ARTIST_SIGN_UP = `/artist${SIGN_UP}`;
+export default ROUTES;

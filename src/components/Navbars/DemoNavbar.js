@@ -53,14 +53,10 @@ class DemoNavbar extends React.Component {
             className="navbar-main navbar-transparent navbar-light headroom"
             expand="lg"
             id="navbar-main"
+            tabs vertical pills
           >
             <Container>
-              <NavbarBrand className="mr-lg-5" to="/" tag={Link}>
-                <img
-                  alt="..."
-                  src="./assets/img/brand/argon-react-white.png"
-                />
-              </NavbarBrand>
+
               <button className="navbar-toggler" id="navbar_global">
                 <span className="navbar-toggler-icon" />
               </button>

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import { Link, withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
@@ -12,8 +11,9 @@ import {
 } from 'reactstrap';
 
 import { withFirebase } from '../../components/Firebase';
+import { create as createUser } from '../../firebase/firestore/user';
 import * as ROUTES from '../../constants/routes';
-import ENV from '../../constants/environment/common.env';
+
 import RegisterForm, { 
   initFormData
 } from './form';
@@ -35,16 +35,19 @@ class RegisterPage extends Component {
     dispatch(initFormData(data));
   }
 
-  handleSubmit(data) {
+  async handleSubmit(data) {
     const { email, passwordOne } = data;
-    this.props.firebase
-      .doCreateUserWithEmailAndPassword(email, passwordOne)
-      .then(authUser => {
-        console.log({authUser})
-      })
-      .catch(error => {
-        console.error({error})
-      });
+    const { history, firebase } = this.props;
+    try {
+      const result = await firebase.doCreateUserWithEmailAndPassword(email, passwordOne);
+      const docRef = await createUser(firebase.firestore, { uid: result.user.uid, email});
+      if (docRef.id) {
+        history.push(ROUTES.HOME);
+      }
+    }
+    catch (e) {
+      console.error({e})
+    }
   }
 
   componentDidMount() {
