@@ -12,6 +12,7 @@ import Register from '../containers/Register';
 import Login from '../containers/Login';
 import Home from '../containers/Home';
 import Sidebar from '../components/Sidebar/Sidebar'
+import AdminNavbar from '../components/Navbars/AdminNavbar'
 
 import * as ROUTES from '../constants/routes'
 
@@ -36,13 +37,16 @@ class Main extends Component {
     return this.props.dispatchSetUsersFunction(JSON.parse(token));
   }
 
-  // 
   render() {
-    const { user } = this.props;
+    const { user, location: { pathname } } = this.props;
+    const path = pathname.split("/")[pathname.split("/").length-1]
     return (
       <>
         {user ? <Sidebar {...this.props} /> : null}
-        <div>
+        <div className="main-content" ref="mainContent">
+          <AdminNavbar
+            brandText={path}
+          />
           <Switch>
             <Route path="/signin" render={() => <Login {...this.props} />} />
             <Route path="/signup" render={() => <Register {...this.props} />} />

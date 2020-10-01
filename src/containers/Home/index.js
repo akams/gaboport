@@ -8,7 +8,9 @@ class Home extends Component {
   render() {
     return (
       <>
-        <h1>Welcome home</h1>
+        <div style={{padding: '20%'}}>
+          <h1>Welcome home</h1>
+        </div>
       </>
     );
   }
