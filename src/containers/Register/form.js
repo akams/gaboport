@@ -29,15 +29,6 @@ class RegisterForm extends Component {
 
   handleSubmit(data) {
     this.props.originalOnSubmit(data);
-    // console.error('----->>>son', {errors})
-    // errors.then(a => console.log({a})).catch(ee => console.error(ee))
-    // const errors = this.props.originalOnSubmit(data, mode);
-    // if (!errors) {
-    //   this.setState({
-    //     loading: true,
-    //     disabled: true
-    //   });
-    // }
   };
 
   isWeakPassword(mdp){

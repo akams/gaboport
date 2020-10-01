@@ -22,6 +22,8 @@ class Login extends Component {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
     this.refs.main.scrollTop = 0;
+
+    console.log('HELLLOOOO')
   }
   render() {
     return (

@@ -11,8 +11,9 @@ import {
 } from 'reactstrap';
 
 import { withFirebase } from '../../components/Firebase';
-import { create as createUser } from '../../firebase/firestore/user';
+import { create as createUser, getLastInsert } from '../../firebase/firestore/user';
 import * as ROUTES from '../../constants/routes';
+import { dispatchSetUsers } from '../../redux/action/user';
 
 import RegisterForm, { 
   initFormData
@@ -40,8 +41,11 @@ class RegisterPage extends Component {
     const { history, firebase } = this.props;
     try {
       const result = await firebase.doCreateUserWithEmailAndPassword(email, passwordOne);
-      const docRef = await createUser(firebase.firestore, { uid: result.user.uid, email});
-      if (docRef.id) {
+      await createUser(firebase.firestore, { uid: result.user.uid, email});
+      const lastUser = await getLastInsert(firebase.firestore, result.user.uid)
+      if (lastUser.id) {
+        this.props.dispatchSetUsersFunction(lastUser.data);
+        sessionStorage.setItem('cgabo_user', JSON.stringify(lastUser.data));
         history.push(ROUTES.HOME);
       }
     }
@@ -92,7 +96,9 @@ class RegisterPage extends Component {
   }
 }
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  dispatchSetUsersFunction: user => dispatchSetUsers(user),
+};
 const mapStateToProps = () => ({});
 
 export default compose(

@@ -1,20 +1,87 @@
-import React from 'react';
+import React, { Component }  from 'react';
 import { Route, Switch, Redirect } from 'react-router';
+import { withRouter } from 'react-router-dom';
+import { compose } from 'recompose';
+import { connect } from 'react-redux';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
-import InAppRouteur from '../routes/InAppRouteur';
-import AuthRouteur from '../routes/AuthRouteur';
+import { withAuthentication } from '../components/Session';
+import { dispatchSetUsers } from '../redux/action/user';
 
-function Main(props) {
+import Register from '../containers/Register';
+import Login from '../containers/Login';
+import Home from '../containers/Home';
+import Sidebar from '../components/Sidebar/Sidebar'
+
+import * as ROUTES from '../constants/routes'
+
+
+class Main extends Component {
+  state = {};
+
+  componentWillMount() {
+    this.loadUserFromToken();
+  }
+
+  loadUserFromToken() {
+    const { user, history } = this.props;
+    let token = sessionStorage.getItem('cgabo_user');
+    if (!token || token === '') {
+      //if there is no token, dont bother
+      if (user === null) {
+        return history.push("/signin");
+      }
+      return;
+    }
+    return this.props.dispatchSetUsersFunction(JSON.parse(token));
+  }
+
+  // 
+  render() {
+    const { user } = this.props;
+    return (
+      <>
+        {user ? <Sidebar {...this.props} /> : null}
+        <div>
+          <Switch>
+            <Route path="/signin" render={() => <Login {...this.props} />} />
+            <Route path="/signup" render={() => <Register {...this.props} />} />
+            <Route exact path="/admin/home" render={() => <Home {...this.props} />} />
+            <Redirect from="/" to="/admin/home" />
+          </Switch>
+        </div>
+      </>
+    );
+  }
+}
+
+function App(props) {
+  const { firebase } = props;
+  const [ user ] = useAuthState(firebase.auth);
   return (
     <>
-      <Switch>
-        <Route exact path="/admin" render={() => <InAppRouteur {...props} />} />
-        <Route exact path="/auth" render={() => <AuthRouteur {...props} />} />
-        <Redirect from="/" to="/admin/home" />
-      </Switch>
+      <Main
+        user={user}
+        {...props}
+      />
     </>
   );
 }
 
+const mapDispatchToProps = {
+  dispatchSetUsersFunction: user => dispatchSetUsers(user),
+};
 
-export default Main;
+const mapStateToProps = () => ({
+});
+
+
+const AppRedux = compose(
+  withRouter,
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )
+)(App);
+
+export default withAuthentication(AppRedux);

@@ -33,7 +33,7 @@ class Firebase {
     this.auth.signInWithEmailAndPassword(email, password);
 
   doSignOut = () => {
-    sessionStorage.removeItem('cookie_user');
+    sessionStorage.removeItem('cgabo_user');
     this.auth.signOut();
   }
 
