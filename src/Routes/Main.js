@@ -44,9 +44,11 @@ class Main extends Component {
       <>
         {user ? <Sidebar {...this.props} /> : null}
         <div className="main-content" ref="mainContent">
-          <AdminNavbar
-            brandText={path}
-          />
+          {user ?
+            <AdminNavbar
+              brandText={path}
+            /> : null
+          }
           <Switch>
             <Route path="/signin" render={() => <Login {...this.props} />} />
             <Route path="/signup" render={() => <Register {...this.props} />} />

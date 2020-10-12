@@ -17,9 +17,12 @@ import {
   Container,
   Media
 } from 'reactstrap';
+import { withFirebase } from '../Firebase'
 
 class AdminNavbar extends React.Component {
   render() {
+    console.log('props', this.props)
+    const { firebase } = this.props;
     return (
       <>
         <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -68,7 +71,7 @@ class AdminNavbar extends React.Component {
                     <span>Support</span>
                   </DropdownItem>
                   <DropdownItem divider />
-                  <DropdownItem href="#pablo" onClick={e => e.preventDefault()}>
+                  <DropdownItem href="" onClick={firebase.doSignOut}>
                     <i className="ni ni-user-run" />
                     <span>Logout</span>
                   </DropdownItem>
@@ -82,4 +85,4 @@ class AdminNavbar extends React.Component {
   }
 }
 
-export default AdminNavbar;
+export default withFirebase(AdminNavbar);
