@@ -21,7 +21,6 @@ import { withFirebase } from '../Firebase'
 
 class AdminNavbar extends React.Component {
   render() {
-    console.log('props', this.props)
     const { firebase } = this.props;
     return (
       <>

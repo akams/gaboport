@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import { compose } from 'recompose';
+import { connect } from 'react-redux';
 // reactstrap components
 import {
   Button,
@@ -15,17 +17,55 @@ import {
   Row,
   Col
 } from 'reactstrap';
+import { toast } from 'react-toastify';
 import * as ROUTES from '../../constants/routes';
+import { withFirebase } from '../../components/Firebase';
+import { getLastInsert } from '../../firebase/firestore/user';
+import { dispatchSetUsers } from '../../redux/action/user';
+
+const INITIAL_STATE = {
+  email: '',
+  password: '',
+  error: null,
+};
+
 
 class Login extends Component {
-  componentDidMount() {
-    document.documentElement.scrollTop = 0;
-    document.scrollingElement.scrollTop = 0;
-    this.refs.main.scrollTop = 0;
+  constructor(props) {
+    super(props);
 
-    console.log('HELLLOOOO')
+    this.state = { ...INITIAL_STATE };
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
+
+  onSubmit = event => {
+    const { email, password } = this.state;
+    const { firebase } = this.props;
+    firebase
+      .doSignInWithEmailAndPassword(email, password)
+      .then((result) => {
+        getLastInsert(firebase.firestore, result.user.uid).then((userInfo) => {
+          this.props.dispatchSetUsersFunction(userInfo.data);
+          sessionStorage.setItem('cgabo_user', JSON.stringify(userInfo.data));
+          this.setState({ ...INITIAL_STATE });
+          this.props.history.push("/admin/home");
+        })
+      })
+      .catch(error => {
+        toast.error(`Error: ${error.message}`);
+        this.setState({ error });
+      });
+
+    event.preventDefault();
+  }
+
+  onChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
+
   render() {
+    const { email, password } = this.state;
     return (
       <>
         <main ref="main">
@@ -48,7 +88,7 @@ class Login extends Component {
                       <div className="text-center text-muted mb-4">
                         <small>Connexion</small>
                       </div>
-                      <Form role="form">
+                      <Form role="form" onSubmit={this.onSubmit}>
                         <FormGroup className="mb-3">
                           <InputGroup className="input-group-alternative">
                             <InputGroupAddon addonType="prepend">
@@ -56,7 +96,13 @@ class Login extends Component {
                                 <i className="ni ni-email-83" />
                               </InputGroupText>
                             </InputGroupAddon>
-                            <Input placeholder="Email" type="email" />
+                            <Input 
+                              placeholder="Email"
+                              type="email"
+                              name="email"
+                              value={email}
+                              onChange={this.onChange}
+                            />
                           </InputGroup>
                         </FormGroup>
                         <FormGroup>
@@ -70,6 +116,9 @@ class Login extends Component {
                               placeholder="Password"
                               type="password"
                               autoComplete="off"
+                              name="password"
+                              value={password}
+                              onChange={this.onChange}
                             />
                           </InputGroup>
                         </FormGroup>
@@ -90,7 +139,7 @@ class Login extends Component {
                           <Button
                             className="my-4"
                             color="primary"
-                            type="button"
+                            type="submit"
                           >
                             Sign in
                           </Button>
@@ -127,4 +176,17 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapDispatchToProps = {
+  dispatchSetUsersFunction: user => dispatchSetUsers(user),
+};
+const mapStateToProps = () => ({});
+
+
+export default compose(
+  withRouter,
+  withFirebase,
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )
+)(Login)

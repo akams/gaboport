@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { ToastContainer } from 'react-toastify';
 
 import { withAuthentication } from '../components/Session';
 import { dispatchSetUsers } from '../redux/action/user';
@@ -22,6 +23,14 @@ class Main extends Component {
 
   componentWillMount() {
     this.loadUserFromToken();
+  }
+
+  componentDidUpdate(prevProps) {
+    const currProps = this.props;
+    const { history } = currProps;
+    if (currProps.user === null && currProps.user !== prevProps.user) {
+      return history.push("/signin");
+    }
   }
 
   loadUserFromToken() {
@@ -69,6 +78,17 @@ function App(props) {
       <Main
         user={user}
         {...props}
+      />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
       />
     </>
   );

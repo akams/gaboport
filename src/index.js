@@ -7,6 +7,7 @@ import './assets/vendor/font-awesome/css/font-awesome.min.css';
 import './assets/scss/argon-design-system-react.scss?v1.1.0';
 import './assets/scss/argon-dashboard-react.scss';
 import './index.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 import App from './App';
 import * as serviceWorker from './serviceWorker';
